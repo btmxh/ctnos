@@ -63,6 +63,8 @@ ctn::DesktopState& ctn::Game::GetDesktopState() {
 }
 
 void ctn::Game::SetCurrentState(State &state) {
+  if(m_currentState) m_currentState->Hide();
   m_currentState = &state;
+  state.Show();
 }
 
