@@ -1,0 +1,6 @@
+[submodule "external/nanovg"]
+	path = external/nanovg
+	url = https://github.com/memononen/nanovg.git
+[submodule "external/vkfw"]
+	path = external/vkfw
+	url = https://github.com/Cvelth/vkfw.git

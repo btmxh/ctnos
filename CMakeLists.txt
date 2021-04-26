@@ -10,10 +10,22 @@ add_library(glad
 
 target_include_directories(glad PUBLIC glad/include)
 
+add_library(nanovg
+  external/nanovg/src/nanovg.c
+)
+
+target_include_directories(nanovg PUBLIC external/nanovg/src)
+
 add_executable(ctnos
+  src/graphics/nanovg.cpp
+  src/states/boot_state.cpp
+  src/states/desktop_state.cpp
+  src/states/state.cpp
+  src/game.cpp
   src/main.cpp
 )
 
-target_include_directories(ctnos PUBLIC vkfw)
-target_link_libraries(ctnos PUBLIC glad glfw)
+target_include_directories(ctnos PUBLIC external/vkfw/include)
+
+target_link_libraries(ctnos PUBLIC glad glfw nanovg)
 
