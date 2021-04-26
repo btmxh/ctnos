@@ -1,0 +1,14 @@
+Initializing system display...
+Successful.
+
+Loading CurtainOS...
+
+Welcome to CurtainOS version 2.31.40
+
+Initializing window manager...
+
+Starting Network Service...
+Successful.
+
+CurtainOS is going to start soon!
+
