@@ -1,27 +1,17 @@
 #include <iostream>
 
+#include "game.hpp"
 #define VKFW_NO_INCLUDE_VULKAN_HPP
-#include "vkfw.hpp"
+#include "vkfw/vkfw.hpp"
 #include "glad/gl.h"
 
 int main() {
-  auto vkfw = vkfw::initUnique();
-
-  vkfw::WindowHints hints;
-  hints.clientAPI = vkfw::ClientAPI::eOpenGL;
-  auto window = vkfw::createWindowUnique(1280, 720, "ctnos", hints);
-
-  window->makeContextCurrent();
-
-  gladLoadGL(glfwGetProcAddress);
-
-  while (!window->shouldClose()) {
-    vkfw::pollEvents();
-
-    glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    window->swapBuffers();
+  try {
+    ctn::Game game;
+    game.loop();
+    return 0;
+  } catch (std::exception& ex) {
+    std::cerr << "exception: " << ex.what() << std::endl;
+    return 1;
   }
-
-  return 0;
 }
