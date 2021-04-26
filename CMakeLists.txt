@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 project(ctnos C CXX)
 
 find_package(glfw3 REQUIRED)
+find_package(glm REQUIRED)
 
 add_library(glad
   glad/src/gl.c
@@ -27,5 +28,5 @@ add_executable(ctnos
 
 target_include_directories(ctnos PUBLIC external/vkfw/include)
 
-target_link_libraries(ctnos PUBLIC glad glfw nanovg)
+target_link_libraries(ctnos PUBLIC glm glad glfw nanovg)
 
