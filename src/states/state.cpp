@@ -8,3 +8,5 @@ void ctn::State::Render(float delta) {}
 void ctn::State::Show() {}
 void ctn::State::Hide() {}
 
+ctn::Game& ctn::State::GetGame() { return m_game; }
+

@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-ctn::Window::Window(WindowManager &mgr, WindowManager::WindowID id,
+ctn::Window::Window(WindowManager &mgr, WindowID id,
                     const WindowBuilder<Window> &builder)
     : m_mgr(mgr),
       m_id(id),

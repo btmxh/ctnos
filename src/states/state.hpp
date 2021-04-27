@@ -13,6 +13,8 @@ class State {
   virtual void Show();
   virtual void Hide();
 
+  Game& GetGame();
+
  protected:
   Game& m_game;
 };

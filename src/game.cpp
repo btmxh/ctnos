@@ -22,12 +22,15 @@ ctn::Game::Game()
       }()),
       m_nvg(),
       m_boot(*this),
-      m_desktop(*this),
-      m_currentState(&m_boot) {
+      m_desktop(*this)
+      {
+
   nvgCreateFont(m_nvg, MONOSPACE_FONT,
                 "fonts/liberation/LiberationMono-Regular.ttf");
   nvgCreateFont(m_nvg, SAN_SERIF_FONT,
                 "fonts/liberation/LiberationSans-Regular.ttf");
+        m_currentState = &m_boot;
+        m_boot.Show();
 }
 
 void ctn::Game::loop() {
@@ -54,16 +57,12 @@ void ctn::Game::loop() {
 
 ctn::NvgContext& ctn::Game::GetNanoVG() { return m_nvg; }
 
-ctn::BootState& ctn::Game::GetBootState() {
-  return m_boot;
-}
+ctn::BootState& ctn::Game::GetBootState() { return m_boot; }
 
-ctn::DesktopState& ctn::Game::GetDesktopState() {
-  return m_desktop;
-}
+ctn::DesktopState& ctn::Game::GetDesktopState() { return m_desktop; }
 
-void ctn::Game::SetCurrentState(State &state) {
-  if(m_currentState) m_currentState->Hide();
+void ctn::Game::SetCurrentState(State& state) {
+  if (m_currentState) m_currentState->Hide();
   m_currentState = &state;
   state.Show();
 }

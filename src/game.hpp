@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/glm.hpp"
 #include "graphics/nanovg.hpp"
 #include "states/boot_state.hpp"
 #include "states/desktop_state.hpp"
@@ -20,6 +21,12 @@ class Game {
   DesktopState& GetDesktopState();
 
   void SetCurrentState(State& state);
+
+  template <typename T = float, glm::qualifier glmQ = glm::defaultp>
+  glm::vec<2, T, glmQ> GetFramebufferSize() const {
+    auto [w, h] = m_window->getFramebufferSize();
+    return {static_cast<T>(w), static_cast<T>(h)};
+  }
 
  private:
   vkfw::UniqueInstance m_vkfw;

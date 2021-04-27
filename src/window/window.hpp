@@ -1,10 +1,14 @@
 #pragma once
 
+#include <string>
+
 #include "../common/rect.hpp"
-#include "window_manager.hpp"
+#include "../graphics/nanovg.hpp"
 
 namespace ctn {
+class WindowManager;
 class Window;
+using WindowID = size_t;
 
 template <typename WindowClass>
 class WindowBuilder {
@@ -35,23 +39,22 @@ class WindowBuilder {
   }
 
  private:
-  Rect2 m_bounds;
-  std::string m_title;
-  bool m_decorated;
-  bool m_alwaysOnTop;
+  Rect2 m_bounds = {0.0f, 0.0f, 0.0f, 0.0f};
+  std::string m_title = "Window";
+  bool m_decorated = true;
+  bool m_alwaysOnTop = false;
 
   friend class Window;
 };
 class Window {
  public:
-  Window(WindowManager& mgr, WindowManager::WindowID id,
-         const WindowBuilder<Window>& builder);
+  Window(WindowManager& mgr, WindowID id, const WindowBuilder<Window>& builder);
 
   virtual void Render(NvgContext& ctx, float delta);
 
- private:
+ protected:
   WindowManager& m_mgr;
-  WindowManager::WindowID m_id;
+  WindowID m_id;
   Rect2 m_bounds;
   std::string m_title;
   bool m_decorated;
