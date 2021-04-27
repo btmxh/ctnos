@@ -1,4 +1,6 @@
-#include "aabb.hpp"
+#include "rect.hpp"
+
+ctn::Rect2::Rect2() : min(0.0f, 0.0f), max(0.0f, 0.0f) {}
 
 ctn::Rect2::Rect2(Vec2 min, Vec2 max) : min(min), max(max) {}
 
