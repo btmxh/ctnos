@@ -16,7 +16,11 @@ ctn::BootState::BootState(Game& game)
 
 void ctn::BootState::Render(float delta) {
   float rngValue = m_rng(m_rngEngine);
+#ifndef NDEBUG
+  if (rngValue < 1.0f) {
+#else
   if (rngValue < delta) {
+#endif
     m_printedLines++;
   }
 
@@ -28,7 +32,9 @@ void ctn::BootState::Render(float delta) {
   auto& nvg = m_game.GetNanoVG();
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  nvgBeginFrame(nvg, 1280.0f, 720.0f, 1.0f);
+
+  Vec2 framebufferSize = m_game.GetFramebufferSize();
+  nvgBeginFrame(nvg, framebufferSize.x, framebufferSize.y, 1.0f);
 
   nvgBeginPath(nvg);
 
