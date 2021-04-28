@@ -24,3 +24,7 @@ ctn::Rect2 ctn::Rect2::operator+(Vec2 translate) const {
   return {min + translate, max + translate};
 }
 
+ctn::Rect2 ctn::Rect2::operator-(Vec2 translate) const {
+  return {min - translate, max - translate};
+}
+

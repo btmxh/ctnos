@@ -43,5 +43,6 @@ struct Rect2 {
   Rect2 Expand(Vec2 amount) const;
 
   Rect2 operator+(Vec2 translate) const;
+  Rect2 operator-(Vec2 translate) const;
 };
 }  // namespace ctn
