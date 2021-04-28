@@ -1,13 +1,16 @@
 #include "window.hpp"
 
-ctn::Window::Window(WindowManager &mgr, WindowID id,
-                    const WindowBuilder<Window> &builder)
-    : m_mgr(mgr),
-      m_id(id),
-      m_title(builder.m_title),
-      m_bounds(builder.m_bounds),
-      m_alwaysOnTop(builder.m_alwaysOnTop),
-      m_decorated(builder.m_decorated) {}
+void ctn::Window::RenderWindow(NvgContext &ctx, float delta) {
+  nvgSave(ctx);
 
-void ctn::Window::Render(NvgContext &ctx, float delta) {}
+  nvgTranslate(ctx, m_bounds.min.x, m_bounds.min.y);
+  nvgScissor(ctx, 0.0f, 0.0f, m_bounds.max.x - m_bounds.min.x,
+             m_bounds.max.y - m_bounds.min.y);
+
+  RenderContent(ctx, delta);
+
+  nvgRestore(ctx);
+}
+
+void ctn::Window::RenderContent(NvgContext &ctx, float delta) {}
 

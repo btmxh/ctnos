@@ -6,13 +6,13 @@
 #include "window_manager.hpp"
 
 ctn::DesktopWindow::DesktopWindow(WindowManager &mgr, WindowID id,
-                                  const WindowBuilder<DesktopWindow> &builder)
+                                  const DesktopWindowBuilder &builder)
     : Window(mgr, id, builder) {
   // TODO: add RAII to this
   m_wallpaper = nvgCreateImage(mgr.GetNanoVG(), "res/wallpaper.png", 0);
 }
 
-void ctn::DesktopWindow::Render(NvgContext &nvg, float delta) {
+void ctn::DesktopWindow::RenderContent(NvgContext &nvg, float delta) {
   nvgBeginPath(nvg);
 
   Vec2 framebufferSize = m_mgr.GetDesktopState().GetGame().GetFramebufferSize();

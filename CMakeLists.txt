@@ -21,9 +21,9 @@ target_include_directories(nanovg PUBLIC external/nanovg/src)
 
 add_executable(ctnos
   src/common/rect.cpp
-  src/window/window.cpp
-  src/window/desktop_window.cpp
-  src/window/window_manager.cpp
+  src/windows/window.cpp
+  src/windows/desktop_window.cpp
+  src/windows/window_manager.cpp
   src/graphics/nanovg.cpp
   src/states/boot_state.cpp
   src/states/desktop_state.cpp

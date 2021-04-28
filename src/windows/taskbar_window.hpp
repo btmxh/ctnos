@@ -12,7 +12,7 @@ class TaskbarWindow : public Window {
   TaskbarWindow(WindowManager& mgr, WindowID id,
                 const WindowBuilder<TaskbarWindow>& builder);
 
-  void Render(float delta);
+  void RenderContent(float delta);
 };
 }  // namespace ctn
 

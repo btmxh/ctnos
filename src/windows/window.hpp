@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string>
 
 #include "../common/rect.hpp"
@@ -10,32 +11,32 @@ class WindowManager;
 class Window;
 using WindowID = size_t;
 
-template <typename WindowClass>
-class WindowBuilder {
+template <typename SELF>
+class AbstractWindowBuilder {
  private:
-  using BuilderType = WindowBuilder<WindowClass>;
-
  public:
-  WindowBuilder() {}
+  AbstractWindowBuilder() {}
 
-  BuilderType& SetBounds(const Rect2& bounds) {
+  virtual SELF& self() = 0;
+
+  SELF& SetBounds(const Rect2& bounds) {
     m_bounds = bounds;
-    return *this;
+    return self();
   }
 
-  BuilderType& SetTitle(const std::string& title) {
+  SELF& SetTitle(const std::string& title) {
     m_title = title;
-    return *this;
+    return self();
   }
 
-  BuilderType& SetDecorated(bool decorated) {
+  SELF& SetDecorated(bool decorated) {
     m_decorated = decorated;
-    return *this;
+    return self();
   }
 
-  BuilderType& SetAlwaysOnTop(bool alwaysOnTop) {
+  SELF& SetAlwaysOnTop(bool alwaysOnTop) {
     m_alwaysOnTop = alwaysOnTop;
-    return *this;
+    return self();
   }
 
  private:
@@ -46,11 +47,21 @@ class WindowBuilder {
 
   friend class Window;
 };
+
 class Window {
  public:
-  Window(WindowManager& mgr, WindowID id, const WindowBuilder<Window>& builder);
+  template <typename SELF>
+  Window(WindowManager& mgr, WindowID id,
+         const AbstractWindowBuilder<SELF>& builder)
+      : m_mgr(mgr),
+        m_id(id),
+        m_title(builder.m_title),
+        m_bounds(builder.m_bounds),
+        m_alwaysOnTop(builder.m_alwaysOnTop),
+        m_decorated(builder.m_decorated) {}
 
-  virtual void Render(NvgContext& ctx, float delta);
+  void RenderWindow(NvgContext& ctx, float delta);
+  virtual void RenderContent(NvgContext& ctx, float delta);
 
  protected:
   WindowManager& m_mgr;
@@ -59,5 +70,9 @@ class Window {
   std::string m_title;
   bool m_decorated;
   bool m_alwaysOnTop;
+
+  template <typename RenderFunc, typename StateHandleFunc>
+  void Button(const Rect2& bounds, RenderFunc&& render,
+              StateHandleFunc&& handleState) {}
 };
 }  // namespace ctn

@@ -5,15 +5,17 @@
 namespace ctn {
 class DesktopWindow;
 
-template <>
-class WindowBuilder<DesktopWindow> : public WindowBuilder<Window> {};
+class DesktopWindowBuilder
+  : public AbstractWindowBuilder<DesktopWindowBuilder> {
+    DesktopWindowBuilder& self() { return *this; }
+  };
 
 class DesktopWindow : public Window {
  public:
   DesktopWindow(WindowManager& mgr, WindowID id,
-                const WindowBuilder<DesktopWindow>& builder);
+                const DesktopWindowBuilder& builder);
 
-  void Render(NvgContext& nvg, float delta);
+  void RenderContent(NvgContext& nvg, float delta);
 
  private:
   int m_wallpaper;

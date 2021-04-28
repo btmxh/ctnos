@@ -5,16 +5,12 @@
 #include "window.hpp"
 
 ctn::WindowManager::WindowManager(DesktopState& state) : m_desktopState(state) {
-  WindowBuilder<DesktopWindow> desktopWindowBuilder;
-
   // clang-format off
-  CreateWindow<DesktopWindow>(WindowBuilder<DesktopWindow>()
+  CreateWindow<DesktopWindow>(DesktopWindowBuilder()
     .SetDecorated(false)
     .SetAlwaysOnTop(false)
     .SetBounds({{0.0f, 0.0f}, state.GetGame().GetFramebufferSize()})
     .SetTitle("desktop_window"));
-
-  
   // clang-format on
 }
 
@@ -22,7 +18,7 @@ void ctn::WindowManager::Render(NvgContext& nvg, float delta) {
   for (const auto id : m_windowOrder) {
     const auto& window = m_windows[id];
 
-    window->Render(nvg, delta);
+    window->RenderWindow(nvg, delta);
   }
 }
 
