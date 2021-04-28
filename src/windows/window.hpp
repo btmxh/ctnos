@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 
-#include "../common/rect.hpp"
+#include "../common/shape.hpp"
 #include "../graphics/nanovg.hpp"
 #include "input.hpp"
 #include "widget_data.hpp"
@@ -76,23 +76,26 @@ class Window {
   NvgContext& GetNanoVG();
   Input& GetInput();
 
-  template <typename RenderFunc, typename StateHandleFunc,
+  template <typename ShapeClass, typename RenderFunc,
             typename = std::enable_if_t<
-                std::is_invocable_v<RenderFunc, NvgContext&, const Rect2&,
-                                    ButtonData> &&
-                std::is_invocable_v<StateHandleFunc, ButtonData>>>
-  void Button(const Rect2& bounds, RenderFunc&& render,
-              StateHandleFunc&& handleState) {
+                std::is_invocable_v<RenderFunc, NvgContext&, const ShapeClass&,
+                                    ButtonData> 
+                                      &&
+                std::is_convertible_v<ShapeClass&, Shape<ShapeClass>&>
+                >>
+  ButtonData Button(
+      const ShapeClass& bounds,
+      RenderFunc&& render = [](auto& nvg, const auto& bounds, auto data) {}) {
     ButtonData data{ButtonData::State::NORMAL, false};
 
-    Rect2 inputBounds = bounds + m_bounds.min;
+    auto inputBounds = bounds + m_bounds.min;
 
     auto& input = GetInput();
     const auto& lmb = input[vkfw::MouseButton::eLeft];
 
-    bool mouseInBounds = input.cursor.In(m_bounds);
+    bool mouseInBounds = input.cursor.In(inputBounds);
     bool cursorLastPressedInBounds =
-        m_bounds.ContainsPoint(lmb->lastPressedCursorPos);
+        inputBounds.ContainsPoint(lmb->lastPressedCursorPos);
     bool mouseDown = lmb->down;
     bool mouseReleased = lmb.released();
 
@@ -102,8 +105,8 @@ class Window {
       data.onAction = mouseReleased;
     }
 
-    handleState(data);
     render(GetNanoVG(), bounds, data);
+    return data;
   }
 };
 }  // namespace ctn
