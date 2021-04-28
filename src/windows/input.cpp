@@ -12,18 +12,6 @@ bool ctn::MouseButtonState::released() const {
   return lastFrame.down && !thisFrame.down;
 }
 
-bool ctn::CursorPosState::In(const Rect2& rect) const {
-  return rect.ContainsPoint(thisFrame);
-}
-
-bool ctn::CursorPosState::Entered(const Rect2& rect) const {
-  return !rect.ContainsPoint(lastFrame) && rect.ContainsPoint(thisFrame);
-}
-
-bool ctn::CursorPosState::Exited(const Rect2& rect) const {
-  return rect.ContainsPoint(lastFrame) && !rect.ContainsPoint(thisFrame);
-}
-
 ctn::Input::Input(const vkfw::Window& window) : window(window) {
   vkfw::Key systemKeys[] = {
       vkfw::Key::eEscape, vkfw::Key::eLeftControl, vkfw::Key::eRightControl,

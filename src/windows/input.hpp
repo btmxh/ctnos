@@ -34,9 +34,26 @@ struct MouseButtonState : public InputState<MouseButtonInfo> {
 };
 
 struct CursorPosState : public InputState<Vec2> {
-  bool In(const Rect2& rect) const;
-  bool Entered(const Rect2& rect) const;
-  bool Exited(const Rect2& rect) const;
+  template <typename ShapeClass,
+            typename = std::enable_if_t<
+                std::is_convertible_v<ShapeClass&, Shape<ShapeClass>&>>>
+  bool In(const ShapeClass& shape) const {
+    return shape.ContainsPoint(thisFrame);
+  }
+
+  template <typename ShapeClass,
+            typename = std::enable_if_t<
+                std::is_convertible_v<ShapeClass, Shape<ShapeClass>>>>
+  bool Enter(const ShapeClass& shape) const {
+    return shape.ContainsPoint(thisFrame) && !shape.ContainsPoint(lastFrame);
+  }
+
+  template <typename ShapeClass,
+            typename = std::enable_if_t<
+                std::is_convertible_v<ShapeClass, Shape<ShapeClass>>>>
+  bool Exit(const ShapeClass& shape) const {
+    return !shape.ContainsPoint(thisFrame) && shape.ContainsPoint(lastFrame);
+  }
 };
 
 struct Input {
