@@ -8,14 +8,14 @@ ctn::WindowManager::WindowManager(DesktopState& state) : m_desktopState(state) {
   WindowBuilder<DesktopWindow> desktopWindowBuilder;
 
   // clang-format off
-  desktopWindowBuilder
+  CreateWindow<DesktopWindow>(WindowBuilder<DesktopWindow>()
     .SetDecorated(false)
     .SetAlwaysOnTop(false)
     .SetBounds({{0.0f, 0.0f}, state.GetGame().GetFramebufferSize()})
-    .SetTitle("desktop_window");
-  // clang-format on
+    .SetTitle("desktop_window"));
 
-  CreateWindow<DesktopWindow>(desktopWindowBuilder);
+  
+  // clang-format on
 }
 
 void ctn::WindowManager::Render(NvgContext& nvg, float delta) {

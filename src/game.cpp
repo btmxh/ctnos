@@ -22,15 +22,13 @@ ctn::Game::Game()
       }()),
       m_nvg(),
       m_boot(*this),
-      m_desktop(*this)
-      {
-
+      m_desktop(*this) {
   nvgCreateFont(m_nvg, MONOSPACE_FONT,
                 "fonts/liberation/LiberationMono-Regular.ttf");
   nvgCreateFont(m_nvg, SAN_SERIF_FONT,
                 "fonts/liberation/LiberationSans-Regular.ttf");
-        m_currentState = &m_boot;
-        m_boot.Show();
+  m_currentState = &m_boot;
+  m_currentState->Show();
 }
 
 void ctn::Game::loop() {
