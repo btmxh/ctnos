@@ -5,6 +5,8 @@
 
 #include "../common/rect.hpp"
 #include "../graphics/nanovg.hpp"
+#include "input.hpp"
+#include "widget_data.hpp"
 
 namespace ctn {
 class WindowManager;
@@ -17,7 +19,7 @@ class AbstractWindowBuilder {
  public:
   AbstractWindowBuilder() {}
 
-  virtual SELF& self() = 0;
+  virtual SELF& self() { return static_cast<SELF&>(*this); }
 
   SELF& SetBounds(const Rect2& bounds) {
     m_bounds = bounds;
@@ -71,8 +73,37 @@ class Window {
   bool m_decorated;
   bool m_alwaysOnTop;
 
-  template <typename RenderFunc, typename StateHandleFunc>
+  NvgContext& GetNanoVG();
+  Input& GetInput();
+
+  template <typename RenderFunc, typename StateHandleFunc,
+            typename = std::enable_if_t<
+                std::is_invocable_v<RenderFunc, NvgContext&, const Rect2&,
+                                    ButtonData> &&
+                std::is_invocable_v<StateHandleFunc, ButtonData>>>
   void Button(const Rect2& bounds, RenderFunc&& render,
-              StateHandleFunc&& handleState) {}
+              StateHandleFunc&& handleState) {
+    ButtonData data{ButtonData::State::NORMAL, false};
+
+    Rect2 inputBounds = bounds + m_bounds.min;
+
+    auto& input = GetInput();
+    const auto& lmb = input[vkfw::MouseButton::eLeft];
+
+    bool mouseInBounds = input.cursor.In(m_bounds);
+    bool cursorLastPressedInBounds =
+        m_bounds.ContainsPoint(lmb->lastPressedCursorPos);
+    bool mouseDown = lmb->down;
+    bool mouseReleased = lmb.released();
+
+    if (mouseInBounds && cursorLastPressedInBounds) {
+      data.state =
+          mouseDown ? ButtonData::State::CLICK : ButtonData::State::HOVER;
+      data.onAction = mouseReleased;
+    }
+
+    handleState(data);
+    render(GetNanoVG(), bounds, data);
+  }
 };
 }  // namespace ctn

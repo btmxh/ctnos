@@ -4,6 +4,8 @@
 #include "graphics/nanovg.hpp"
 #include "states/boot_state.hpp"
 #include "states/desktop_state.hpp"
+
+#define VKFW_NO_INCLUDE_VULKAN_HPP
 #include "vkfw/vkfw.hpp"
 
 namespace ctn {
@@ -16,6 +18,7 @@ class Game {
   void loop();
 
   NvgContext& GetNanoVG();
+  vkfw::Window& GetWindow();
 
   BootState& GetBootState();
   DesktopState& GetDesktopState();

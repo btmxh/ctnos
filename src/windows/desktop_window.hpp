@@ -3,12 +3,8 @@
 #include "window.hpp"
 
 namespace ctn {
-class DesktopWindow;
-
 class DesktopWindowBuilder
-  : public AbstractWindowBuilder<DesktopWindowBuilder> {
-    DesktopWindowBuilder& self() { return *this; }
-  };
+    : public AbstractWindowBuilder<DesktopWindowBuilder> {};
 
 class DesktopWindow : public Window {
  public:

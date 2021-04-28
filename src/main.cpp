@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include "game.hpp"
-#define VKFW_NO_INCLUDE_VULKAN_HPP
-#include "vkfw/vkfw.hpp"
-#include "glad/gl.h"
 
 int main() {
   try {

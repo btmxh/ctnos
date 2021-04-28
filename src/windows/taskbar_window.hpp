@@ -3,14 +3,13 @@
 #include "window_manager.hpp"
 
 namespace ctn {
-class TaskbarWindow;
-template <>
-class WindowBuilder<TaskbarWindow> : public WindowBuilder<Window> {};
+class TaskbarWindowBuilder
+    : public AbstractWindowBuilder<TaskbarWindowBuilder> {};
 
 class TaskbarWindow : public Window {
  public:
   TaskbarWindow(WindowManager& mgr, WindowID id,
-                const WindowBuilder<TaskbarWindow>& builder);
+                const TaskbarWindowBuilder& builder);
 
   void RenderContent(float delta);
 };

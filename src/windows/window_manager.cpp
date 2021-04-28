@@ -4,7 +4,8 @@
 #include "desktop_window.hpp"
 #include "window.hpp"
 
-ctn::WindowManager::WindowManager(DesktopState& state) : m_desktopState(state) {
+ctn::WindowManager::WindowManager(DesktopState& state)
+    : m_desktopState(state), m_input(state.GetGame().GetWindow()) {
   // clang-format off
   CreateWindow<DesktopWindow>(DesktopWindowBuilder()
     .SetDecorated(false)
@@ -15,6 +16,8 @@ ctn::WindowManager::WindowManager(DesktopState& state) : m_desktopState(state) {
 }
 
 void ctn::WindowManager::Render(NvgContext& nvg, float delta) {
+  m_input.Update();
+
   for (const auto id : m_windowOrder) {
     const auto& window = m_windows[id];
 
@@ -29,4 +32,6 @@ ctn::NvgContext& ctn::WindowManager::GetNanoVG() {
 ctn::DesktopState& ctn::WindowManager::GetDesktopState() {
   return m_desktopState;
 }
+
+ctn::Input& ctn::WindowManager::GetInput() { return m_input; }
 

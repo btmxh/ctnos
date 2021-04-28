@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "../graphics/nanovg.hpp"
+#include "input.hpp"
 #include "window.hpp"
 
 namespace ctn {
@@ -41,8 +42,11 @@ class WindowManager {
 
   DesktopState& GetDesktopState();
 
+  Input& GetInput();
+
  private:
   DesktopState& m_desktopState;
+  Input m_input;
   std::unordered_map<WindowID, std::unique_ptr<Window>> m_windows;
   std::vector<WindowID> m_windowOrder;
   WindowID m_idCounter = DESKTOP_WINDOW;

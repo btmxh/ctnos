@@ -55,6 +55,8 @@ void ctn::Game::loop() {
 
 ctn::NvgContext& ctn::Game::GetNanoVG() { return m_nvg; }
 
+vkfw::Window& ctn::Game::GetWindow() { return m_window.get(); }
+
 ctn::BootState& ctn::Game::GetBootState() { return m_boot; }
 
 ctn::DesktopState& ctn::Game::GetDesktopState() { return m_desktop; }
