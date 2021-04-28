@@ -1,35 +1,10 @@
 #pragma once
 
 #include "glm/glm.hpp"
-
-namespace glm {
-inline bool operator<(const vec2& v1, const vec2& v2) {
-  return v1.x < v2.x && v1.y < v2.y;
-}
-
-inline bool operator>(const vec2& v1, const vec2& v2) {
-  return v1.x > v2.x && v1.y > v2.y;
-}
-
-inline bool operator<=(const vec2& v1, const vec2& v2) {
-  return v1.x <= v2.x && v1.y <= v2.y;
-}
-
-inline bool operator>=(const vec2& v1, const vec2& v2) {
-  return v1.x >= v2.x && v1.y >= v2.y;
-}
-
-inline bool operator==(const vec2& v1, const vec2& v2) {
-  return v1.x == v2.x && v1.y == v2.y;
-}
-
-inline bool operator!=(const vec2& v1, const vec2& v2) { return !(v1 == v2); }
-}  // namespace glm
+#include "shape.hpp"
 
 namespace ctn {
-using Vec2 = glm::vec2;
-
-struct Rect2 {
+struct Rect2 : public Shape<Rect2> {
   Vec2 min, max;
 
   Rect2();

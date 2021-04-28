@@ -21,6 +21,7 @@ target_include_directories(nanovg PUBLIC external/nanovg/src)
 
 add_executable(ctnos
   src/common/rect.cpp
+  src/common/circle.cpp
   src/windows/input.cpp
   src/windows/window.cpp
   src/windows/desktop_window.cpp
