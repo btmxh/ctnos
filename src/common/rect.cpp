@@ -20,5 +20,7 @@ ctn::Rect2 ctn::Rect2::Expand(Vec2 amount) const {
   return Rect2(min - amount, max + amount);
 }
 
-ctn::Rect2 ctn::Rect2::operator+(Vec2 expand) const { return Expand(expand); }
+ctn::Rect2 ctn::Rect2::operator+(Vec2 translate) const {
+  return {min + translate, max + translate};
+}
 
