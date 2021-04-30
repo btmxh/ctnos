@@ -52,6 +52,7 @@ class AbstractWindowBuilder {
 
 class Window {
  public:
+  static const float borderTop, borderSide;
   template <typename SELF>
   Window(WindowManager& mgr, WindowID id,
          const AbstractWindowBuilder<SELF>& builder)
@@ -64,6 +65,9 @@ class Window {
 
   void RenderWindow(NvgContext& ctx, float delta);
   virtual void RenderContent(NvgContext& ctx, float delta);
+
+  virtual void ScreenResize(Vec2 newSize);
+  Rect2 GetBounds() const;
 
  protected:
   WindowManager& m_mgr;
@@ -79,10 +83,8 @@ class Window {
   template <typename ShapeClass, typename RenderFunc,
             typename = std::enable_if_t<
                 std::is_invocable_v<RenderFunc, NvgContext&, const ShapeClass&,
-                                    ButtonData> 
-                                      &&
-                std::is_convertible_v<ShapeClass&, Shape<ShapeClass>&>
-                >>
+                                    ButtonData> &&
+                std::is_convertible_v<ShapeClass&, Shape<ShapeClass>&>>>
   ButtonData Button(
       const ShapeClass& bounds,
       RenderFunc&& render = [](auto& nvg, const auto& bounds, auto data) {}) {

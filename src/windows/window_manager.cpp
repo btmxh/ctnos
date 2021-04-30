@@ -25,6 +25,26 @@ void ctn::WindowManager::Render(NvgContext& nvg, float delta) {
   }
 }
 
+ctn::Window* ctn::WindowManager::operator[](WindowID id) {
+  auto it = m_windows.find(id);
+
+  if (it != m_windows.end()) {
+    return it->second.get();
+  } else {
+    return nullptr;
+  }
+}
+
+const ctn::Window* ctn::WindowManager::operator[](WindowID id) const {
+  auto it = m_windows.find(id);
+
+  if (it != m_windows.end()) {
+    return it->second.get();
+  } else {
+    return nullptr;
+  }
+}
+
 ctn::NvgContext& ctn::WindowManager::GetNanoVG() {
   return m_desktopState.GetNanoVG();
 }
@@ -34,4 +54,15 @@ ctn::DesktopState& ctn::WindowManager::GetDesktopState() {
 }
 
 ctn::Input& ctn::WindowManager::GetInput() { return m_input; }
+
+void ctn::WindowManager::Resize(Vec2 newSize) {
+  for (auto& [id, window] : m_windows) {
+    window->ScreenResize(newSize);
+  }
+}
+
+ctn::Vec2 ctn::WindowManager::GetSize() const {
+  assert(m_windows.find(DESKTOP_WINDOW) != m_windows.end());
+  return m_windows.find(DESKTOP_WINDOW)->second->GetBounds().max;
+}
 

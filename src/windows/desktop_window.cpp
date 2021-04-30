@@ -25,3 +25,7 @@ void ctn::DesktopWindow::RenderContent(NvgContext &nvg, float delta) {
   nvgClosePath(nvg);
 }
 
+void ctn::DesktopWindow::ScreenResize(Vec2 newSize) {
+  m_bounds = {Vec2(0.0f), newSize};
+}
+

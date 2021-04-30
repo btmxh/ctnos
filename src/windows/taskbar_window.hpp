@@ -12,6 +12,8 @@ class TaskbarWindow : public Window {
                 const TaskbarWindowBuilder& builder);
 
   void RenderContent(float delta);
+
+  void ScreenResize(Vec2 newSize);
 };
 }  // namespace ctn
 

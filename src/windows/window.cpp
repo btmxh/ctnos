@@ -5,6 +5,9 @@
 #include "../common/circle.hpp"
 #include "../game.hpp"
 
+const float ctn::Window::borderTop = 16.0f;
+const float ctn::Window::borderSide = 2.0f;
+
 void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
   nvgSave(ctx);
 
@@ -13,8 +16,8 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
     auto bounds = m_bounds - m_bounds.min;
 
     // Border
-    const float top = 16.0f;
-    const float side = 2.0f;
+    const float top = borderTop;
+    const float side = borderSide;
     {
       const NVGcolor color = nvgRGBf(0.1f, 0.1f, 0.1f);
       Rect2 borderBounds(bounds.min - Vec2(side, top),
@@ -95,6 +98,10 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 }
 
 void ctn::Window::RenderContent(NvgContext& ctx, float delta) {}
+
+void ctn::Window::ScreenResize(Vec2 size) {}
+
+ctn::Rect2 ctn::Window::GetBounds() const { return m_bounds; }
 
 ctn::NvgContext& ctn::Window::GetNanoVG() { return m_mgr.GetNanoVG(); }
 ctn::Input& ctn::Window::GetInput() { return m_mgr.GetInput(); }

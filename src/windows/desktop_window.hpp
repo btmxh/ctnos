@@ -13,6 +13,8 @@ class DesktopWindow : public Window {
 
   void RenderContent(NvgContext& nvg, float delta);
 
+  void ScreenResize(Vec2 newSize);
+
  private:
   int m_wallpaper;
 };

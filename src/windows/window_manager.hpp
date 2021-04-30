@@ -38,11 +38,17 @@ class WindowManager {
     return static_cast<WindowClass&>(*itr->second);
   }
 
+  Window* operator[](WindowID id);
+  const Window* operator[](WindowID id) const;
+
   NvgContext& GetNanoVG();
 
   DesktopState& GetDesktopState();
 
   Input& GetInput();
+
+  void Resize(Vec2 newSize);
+  Vec2 GetSize() const;
 
  private:
   DesktopState& m_desktopState;
