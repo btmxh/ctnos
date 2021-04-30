@@ -19,5 +19,8 @@ struct Rect2 : public Shape<Rect2> {
 
   Rect2 operator+(Vec2 translate) const;
   Rect2 operator-(Vec2 translate) const;
+
+  Rect2& operator+=(Vec2 translate);
+  Rect2& operator-=(Vec2 translate);
 };
 }  // namespace ctn

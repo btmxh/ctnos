@@ -11,7 +11,7 @@ bool ctn::Rect2::ContainsPoint(Vec2 point) const {
   return point >= min && point < max;
 }
 
-bool ctn::Rect2::Intersect(const Rect2 &other) const {
+bool ctn::Rect2::Intersect(const Rect2& other) const {
   return (ContainsPoint(other.min) != ContainsPoint(other.max)) ||
          (other.ContainsPoint(min) != other.ContainsPoint(max));
 }
@@ -26,5 +26,17 @@ ctn::Rect2 ctn::Rect2::operator+(Vec2 translate) const {
 
 ctn::Rect2 ctn::Rect2::operator-(Vec2 translate) const {
   return {min - translate, max - translate};
+}
+
+ctn::Rect2& ctn::Rect2::operator+=(Vec2 translate) {
+  min += translate;
+  max += translate;
+  return *this;
+}
+
+ctn::Rect2& ctn::Rect2::operator-=(Vec2 translate) {
+  min -= translate;
+  max -= translate;
+  return *this;
 }
 
