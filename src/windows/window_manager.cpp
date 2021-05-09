@@ -1,5 +1,8 @@
 #include "window_manager.hpp"
 
+#include <iostream>
+#include <algorithm>
+
 #include "../game.hpp"
 #include "desktop_window.hpp"
 #include "window.hpp"
@@ -22,6 +25,18 @@ void ctn::WindowManager::Render(NvgContext& nvg, float delta) {
     const auto& window = m_windows[id];
 
     window->RenderWindow(nvg, delta);
+  }
+
+  for (auto it = m_windows.begin(); it != m_windows.end();) {
+    if (it->second->m_shouldClose) {
+      auto id = it->first;
+      it = m_windows.erase(it);
+      m_windowOrder.erase(
+          std::remove(m_windowOrder.begin(), m_windowOrder.end(), id),
+          m_windowOrder.end());
+    } else {
+      ++it;
+    }
   }
 }
 

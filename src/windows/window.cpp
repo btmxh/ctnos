@@ -71,7 +71,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
                nvgClosePath(nvg);
                if (data.onAction) {
-                 std::cout << "cosi" << std::endl;
+                 Close();
                }
              });
       Button(minimizeButtonBounds,
@@ -84,7 +84,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
                nvgClosePath(nvg);
                if (data.onAction) {
-                 std::cout << "bunhia" << std::endl;
+                 Hide();
                }
              });
     }
@@ -108,4 +108,5 @@ ctn::Input& ctn::Window::GetInput() { return m_mgr.GetInput(); }
 void ctn::Window::Hide() { m_visible = false; }
 void ctn::Window::Show() { m_visible = true; }
 bool ctn::Window::IsVisible() { return m_visible; }
+void ctn::Window::Close() { m_shouldClose = true; }
 

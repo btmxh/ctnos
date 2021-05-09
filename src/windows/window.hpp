@@ -63,7 +63,8 @@ class Window {
         m_bounds(builder.m_bounds),
         m_alwaysOnTop(builder.m_alwaysOnTop),
         m_decorated(builder.m_decorated),
-        m_visible(true) {}
+        m_visible(true),
+        m_shouldClose(false) {}
 
   void RenderWindow(NvgContext& ctx, float delta);
   virtual void RenderContent(NvgContext& ctx, float delta);
@@ -75,6 +76,8 @@ class Window {
   virtual void Show();
   virtual bool IsVisible();
 
+  virtual void Close();
+
  protected:
   WindowManager& m_mgr;
   WindowID m_id;
@@ -83,6 +86,9 @@ class Window {
   bool m_decorated;
   bool m_alwaysOnTop;
   bool m_visible;
+  bool m_shouldClose;
+
+  friend class WindowManager;
 
   NvgContext& GetNanoVG();
   Input& GetInput();

@@ -16,8 +16,9 @@ class DesktopWindow : public Window {
 
   void ScreenResize(Vec2 newSize);
 
-  // DesktopWindow is a system window, therefore should not be hidden
+  // DesktopWindow is a system window, therefore should not be hidden or closed
   void Hide() {}
+  void Close() {}
 
  private:
   int m_wallpaper;
