@@ -7,7 +7,7 @@ ctn::Circle2::Circle2(float x, float y, float radius) : Circle2({x, y}, radius) 
 
 bool ctn::Circle2::ContainsPoint(Vec2 point) const {
   auto sub = point - center;
-  return glm::dot(sub, sub) <= radius;
+  return glm::dot(sub, sub) <= radius * radius;
 }
 
 ctn::Circle2 ctn::Circle2::operator+(Vec2 translate) const {

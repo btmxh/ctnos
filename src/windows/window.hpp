@@ -52,7 +52,8 @@ class AbstractWindowBuilder {
 
 class Window {
  public:
-  static const float borderTop, borderSide;
+  static const float BORDER_SIDE, BORDER_TOP;
+
   template <typename SELF>
   Window(WindowManager& mgr, WindowID id,
          const AbstractWindowBuilder<SELF>& builder)
@@ -61,13 +62,18 @@ class Window {
         m_title(builder.m_title),
         m_bounds(builder.m_bounds),
         m_alwaysOnTop(builder.m_alwaysOnTop),
-        m_decorated(builder.m_decorated) {}
+        m_decorated(builder.m_decorated),
+        m_visible(true) {}
 
   void RenderWindow(NvgContext& ctx, float delta);
   virtual void RenderContent(NvgContext& ctx, float delta);
 
-  virtual void ScreenResize(Vec2 newSize);
   Rect2 GetBounds() const;
+  virtual void ScreenResize(Vec2 newSize);
+
+  virtual void Hide();
+  virtual void Show();
+  virtual bool IsVisible();
 
  protected:
   WindowManager& m_mgr;
@@ -76,6 +82,7 @@ class Window {
   std::string m_title;
   bool m_decorated;
   bool m_alwaysOnTop;
+  bool m_visible;
 
   NvgContext& GetNanoVG();
   Input& GetInput();

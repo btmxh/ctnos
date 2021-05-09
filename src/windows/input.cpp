@@ -55,5 +55,10 @@ void ctn::Input::Update() {
                                               static_cast<float>(y)};
     }
   }
+
+  cursor.lastFrame = cursor.thisFrame;
+  double x, y;
+  glfwGetCursorPos(window, &x, &y);
+  cursor.thisFrame = {static_cast<float>(x), static_cast<float>(y)};
 }
 

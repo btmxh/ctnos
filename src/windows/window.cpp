@@ -5,30 +5,28 @@
 #include "../common/circle.hpp"
 #include "../game.hpp"
 
-const float ctn::Window::borderTop = 16.0f;
-const float ctn::Window::borderSide = 2.0f;
+const float ctn::Window::BORDER_SIDE = 2.0f;
+const float ctn::Window::BORDER_TOP = 18.0f;
 
 void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
+  if (!m_visible) return;
   nvgSave(ctx);
 
   nvgTranslate(ctx, m_bounds.min.x, m_bounds.min.y);
+  auto bounds = m_bounds - m_bounds.min;
   if (m_decorated) {
-    auto bounds = m_bounds - m_bounds.min;
-
     // Border
-    const float top = borderTop;
-    const float side = borderSide;
     {
       const NVGcolor color = nvgRGBf(0.1f, 0.1f, 0.1f);
-      Rect2 borderBounds(bounds.min - Vec2(side, top),
-                         bounds.max + Vec2(side, side));
+      Rect2 borderBounds(bounds.min - Vec2(BORDER_SIDE, BORDER_TOP),
+                         bounds.max + Vec2(BORDER_SIDE, BORDER_SIDE));
 
       nvgBeginPath(ctx);
 
       ctx.Rect(borderBounds);
 
-      ctx.Rect(m_bounds);
-      nvgPathWinding(ctx, NVG_HOLE);
+      ctx.Rect(bounds);
+      /* nvgPathWinding(ctx, NVG_HOLE); */
 
       nvgFillColor(ctx, color);
       nvgFill(ctx);
@@ -42,11 +40,13 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
       nvgBeginPath(ctx);
 
       nvgFontFace(ctx, Game::SAN_SERIF_FONT);
-      nvgFontSize(ctx, 12.0f);
+      nvgFontSize(ctx, size);
       nvgFillColor(ctx, nvgRGBf(1.0f, 1.0f, 1.0f));
 
-      nvgText(ctx, bounds.min.x, bounds.min.y - 12.0f, m_title.c_str(),
-              nullptr);
+      nvgTextAlign(ctx, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
+
+      nvgText(ctx, bounds.min.x, bounds.min.y - BORDER_TOP * 0.5f,
+              m_title.c_str(), nullptr);
 
       nvgClosePath(ctx);
     }
@@ -55,11 +55,11 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
     {
       const float gap = 4.0f;
       const float radius = 6.0f;
-      Circle2 closeButtonBounds{m_bounds.max.x - gap - radius,
-                                m_bounds.min.y - top * 0.5f, radius};
+      Circle2 closeButtonBounds{bounds.max.x - gap - radius,
+                                bounds.min.y - BORDER_TOP * 0.5f, radius};
 
       Circle2 minimizeButtonBounds =
-          closeButtonBounds - Vec2(gap + radius, 0.0f);
+          closeButtonBounds - Vec2(gap + radius * 2, 0.0f);
 
       Button(closeButtonBounds,
              [&](NvgContext& nvg, const Circle2& bounds, ButtonData data) {
@@ -89,8 +89,8 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
              });
     }
   }
-  nvgScissor(ctx, 0.0f, 0.0f, m_bounds.max.x - m_bounds.min.x,
-             m_bounds.max.y - m_bounds.min.y);
+  nvgScissor(ctx, 0.0f, 0.0f, bounds.max.x - bounds.min.x,
+             bounds.max.y - bounds.min.y);
 
   RenderContent(ctx, delta);
 
@@ -99,10 +99,13 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
 void ctn::Window::RenderContent(NvgContext& ctx, float delta) {}
 
-void ctn::Window::ScreenResize(Vec2 size) {}
-
 ctn::Rect2 ctn::Window::GetBounds() const { return m_bounds; }
+void ctn::Window::ScreenResize(ctn::Vec2 newSize) {}
 
 ctn::NvgContext& ctn::Window::GetNanoVG() { return m_mgr.GetNanoVG(); }
 ctn::Input& ctn::Window::GetInput() { return m_mgr.GetInput(); }
+
+void ctn::Window::Hide() { m_visible = false; }
+void ctn::Window::Show() { m_visible = true; }
+bool ctn::Window::IsVisible() { return m_visible; }
 

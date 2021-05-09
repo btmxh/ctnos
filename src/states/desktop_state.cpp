@@ -2,7 +2,11 @@
 
 #include "../game.hpp"
 
-ctn::DesktopState::DesktopState(Game& game) : State(game), m_windows(*this) {}
+ctn::DesktopState::DesktopState(Game& game) : State(game), m_windows(*this)  {
+  m_windows.CreateWindow<CalculatorWindow>(CalculatorWindowBuilder()
+      .SetBounds({100, 100, 200, 300})
+      .SetMinimumSize({100, 100}));
+}
 
 void ctn::DesktopState::Render(float delta) {
   auto& nvg = m_game.GetNanoVG();

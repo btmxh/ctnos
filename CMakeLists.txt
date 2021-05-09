@@ -26,6 +26,8 @@ add_executable(ctnos
   src/windows/window.cpp
   src/windows/desktop_window.cpp
   src/windows/window_manager.cpp
+  src/windows/app_window.cpp
+  src/windows/calc_window.cpp
   src/graphics/nanovg.cpp
   src/states/boot_state.cpp
   src/states/desktop_state.cpp

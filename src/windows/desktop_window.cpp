@@ -12,6 +12,10 @@ ctn::DesktopWindow::DesktopWindow(WindowManager &mgr, WindowID id,
   m_wallpaper = nvgCreateImage(mgr.GetNanoVG(), "res/wallpaper.png", 0);
 }
 
+ctn::DesktopWindow::~DesktopWindow() {
+  nvgDeleteImage(m_mgr.GetNanoVG(), m_wallpaper);
+}
+
 void ctn::DesktopWindow::RenderContent(NvgContext &nvg, float delta) {
   nvgBeginPath(nvg);
 

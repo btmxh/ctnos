@@ -1,6 +1,6 @@
 #pragma once
 
-#include <type_traits>
+#include <ostream>
 
 #include "glm/glm.hpp"
 
@@ -41,3 +41,10 @@ class Shape {
 };
 
 }  // namespace ctn
+
+#ifndef NDEBUG
+inline std::ostream& operator<<(std::ostream& ostr, const ctn::Vec2& v) {
+  return ostr << "Point(" << v.x << ", " << v.y << ")";
+}
+#endif
+

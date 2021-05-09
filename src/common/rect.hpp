@@ -24,3 +24,10 @@ struct Rect2 : public Shape<Rect2> {
   Rect2& operator-=(Vec2 translate);
 };
 }  // namespace ctn
+
+#ifndef NDEBUG
+inline std::ostream& operator<<(std::ostream& ostr, const ctn::Rect2& rect) {
+  return ostr << "Rect(" << rect.min << ", " << rect.max << ")";
+}
+#endif
+

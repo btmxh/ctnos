@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../windows/window_manager.hpp"
+#include "../windows/calc_window.hpp"
 #include "state.hpp"
 
 namespace ctn {
