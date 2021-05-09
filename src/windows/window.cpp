@@ -1,7 +1,5 @@
 #include "window.hpp"
 
-#include <iostream>
-
 #include "../common/circle.hpp"
 #include "../game.hpp"
 

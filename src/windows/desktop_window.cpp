@@ -1,7 +1,5 @@
 #include "desktop_window.hpp"
 
-#include <iostream>
-
 #include "../game.hpp"
 #include "window_manager.hpp"
 

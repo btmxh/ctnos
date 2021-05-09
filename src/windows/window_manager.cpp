@@ -1,6 +1,5 @@
 #include "window_manager.hpp"
 
-#include <iostream>
 #include <algorithm>
 
 #include "../game.hpp"

@@ -1,8 +1,6 @@
 #include "boot_state.hpp"
 
 #include <fstream>
-#include <iostream>
-
 #include "../game.hpp"
 
 ctn::BootState::BootState(Game& game)
