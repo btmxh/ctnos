@@ -49,7 +49,6 @@ void ctn::BootState::Render(float delta) {
 
   nvgClosePath(nvg);
 
-  nvgClosePath(nvg);
   nvgEndFrame(nvg);
 }
 

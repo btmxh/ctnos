@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <map>
 #include <string>
 
 #include "../common/shape.hpp"
@@ -53,6 +54,14 @@ class AbstractWindowBuilder {
 class Window {
  public:
   static const float BORDER_SIDE, BORDER_TOP;
+  static const NVGpaint BORDER_PAINT;
+  static const float TITLE_FONT_SIZE;
+  static const NVGpaint TITLE_PAINT;
+  static const float WIN_BUTTON_RADIUS, WIN_BUTTON_GAP;
+
+  /* not const due to operator[] */
+  static std::map<ctn::ButtonData::State, NVGpaint> WIN_BUTTON_PAINT,
+      WIN_BUTTON_SYMBOL_PAINT;
 
   template <typename SELF>
   Window(WindowManager& mgr, WindowID id,
@@ -114,9 +123,12 @@ class Window {
     bool mouseDown = lmb->down;
     bool mouseReleased = lmb.released();
 
+    if (mouseInBounds && !mouseDown) {
+      data.state = ButtonData::State::HOVER;
+    }
+
     if (mouseInBounds && cursorLastPressedInBounds) {
-      data.state =
-          mouseDown ? ButtonData::State::CLICK : ButtonData::State::HOVER;
+      if (mouseDown) data.state = ButtonData::State::CLICK;
       data.onAction = mouseReleased;
     }
 

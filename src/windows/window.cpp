@@ -5,6 +5,29 @@
 
 const float ctn::Window::BORDER_SIDE = 2.0f;
 const float ctn::Window::BORDER_TOP = 18.0f;
+const NVGpaint ctn::Window::BORDER_PAINT =
+    ctn::ColorAsPaint(nvgRGBf(0.1f, 0.1f, 0.1f));
+const float ctn::Window::TITLE_FONT_SIZE = 12.0f;
+const NVGpaint ctn::Window::TITLE_PAINT =
+    ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f));
+const float ctn::Window::WIN_BUTTON_RADIUS = 6.0f;
+const float ctn::Window::WIN_BUTTON_GAP = 4.0f;
+std::map<ctn::ButtonData::State, NVGpaint> ctn::Window::WIN_BUTTON_PAINT = {
+    {ctn::ButtonData::State::NORMAL,
+     ctn::ColorAsPaint(nvgRGBf(0.3f, 0.3f, 0.3f))},
+    {ctn::ButtonData::State::HOVER,
+     ctn::ColorAsPaint(nvgRGBf(0.5f, 0.5f, 0.5f))},
+    {ctn::ButtonData::State::CLICK,
+     ctn::ColorAsPaint(nvgRGBf(0.7f, 0.7f, 0.7f))}};
+std::map<ctn::ButtonData::State, NVGpaint>
+    ctn::Window::WIN_BUTTON_SYMBOL_PAINT = {
+        {ctn::ButtonData::State::NORMAL,
+         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
+        {ctn::ButtonData::State::HOVER,
+         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
+        {ctn::ButtonData::State::CLICK,
+         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
+};
 
 void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
   if (!m_visible) return;
@@ -15,7 +38,6 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
   if (m_decorated) {
     // Border
     {
-      const NVGcolor color = nvgRGBf(0.1f, 0.1f, 0.1f);
       Rect2 borderBounds(bounds.min - Vec2(BORDER_SIDE, BORDER_TOP),
                          bounds.max + Vec2(BORDER_SIDE, BORDER_SIDE));
 
@@ -24,9 +46,9 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
       ctx.Rect(borderBounds);
 
       ctx.Rect(bounds);
-      /* nvgPathWinding(ctx, NVG_HOLE); */
+      nvgPathWinding(ctx, NVG_HOLE);
 
-      nvgFillColor(ctx, color);
+      nvgFillPaint(ctx, BORDER_PAINT);
       nvgFill(ctx);
 
       nvgClosePath(ctx);
@@ -34,12 +56,11 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
     // Title
     {
-      const float size = 12.0f;
       nvgBeginPath(ctx);
 
       nvgFontFace(ctx, Game::SAN_SERIF_FONT);
-      nvgFontSize(ctx, size);
-      nvgFillColor(ctx, nvgRGBf(1.0f, 1.0f, 1.0f));
+      nvgFontSize(ctx, TITLE_FONT_SIZE);
+      nvgFillPaint(ctx, TITLE_PAINT);
 
       nvgTextAlign(ctx, NVG_ALIGN_LEFT | NVG_ALIGN_MIDDLE);
 
@@ -51,21 +72,35 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
     // Buttons
     {
-      const float gap = 4.0f;
-      const float radius = 6.0f;
-      Circle2 closeButtonBounds{bounds.max.x - gap - radius,
-                                bounds.min.y - BORDER_TOP * 0.5f, radius};
+      Circle2 closeButtonBounds{
+          bounds.max.x - WIN_BUTTON_GAP - WIN_BUTTON_RADIUS,
+          bounds.min.y - BORDER_TOP * 0.5f, WIN_BUTTON_RADIUS};
 
       Circle2 minimizeButtonBounds =
-          closeButtonBounds - Vec2(gap + radius * 2, 0.0f);
+          closeButtonBounds -
+          Vec2(WIN_BUTTON_GAP + WIN_BUTTON_RADIUS * 2, 0.0f);
 
       Button(closeButtonBounds,
              [&](NvgContext& nvg, const Circle2& bounds, ButtonData data) {
                nvgBeginPath(nvg);
 
                nvg.Circle(bounds);
-               nvgFillColor(nvg, nvgRGBf(1.0f, 0.0f, 1.0f));
+               nvgFillPaint(nvg, WIN_BUTTON_PAINT[data.state]);
                nvgFill(nvg);
+
+               nvgClosePath(nvg);
+
+               nvgBeginPath(nvg);
+
+               nvg.MoveTo(bounds.center - Vec2(0.5f) * bounds.radius);
+               nvg.LineTo(bounds.center + Vec2(0.5f) * bounds.radius);
+
+               nvg.MoveTo(bounds.center - Vec2(0.5f, -0.5f) * bounds.radius);
+               nvg.LineTo(bounds.center + Vec2(0.5f, -0.5f) * bounds.radius);
+
+               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT[data.state]);
+               nvgStrokeWidth(nvg, 1.0f);
+               nvgStroke(nvg);
 
                nvgClosePath(nvg);
                if (data.onAction) {
@@ -77,8 +112,18 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
                nvgBeginPath(nvg);
 
                nvg.Circle(bounds);
-               nvgFillColor(nvg, nvgRGBf(1.0f, 0.0f, 1.0f));
+               nvgFillPaint(nvg, WIN_BUTTON_PAINT[data.state]);
                nvgFill(nvg);
+
+               nvgClosePath(nvg);
+
+               nvgBeginPath(nvg);
+
+               nvg.MoveTo(bounds.center - Vec2(bounds.radius * 0.5f, 0.0f));
+               nvg.LineTo(bounds.center + Vec2(bounds.radius * 0.5f, 0.0f));
+               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT[data.state]);
+               nvgStrokeWidth(nvg, 1.0f);
+               nvgStroke(nvg);
 
                nvgClosePath(nvg);
                if (data.onAction) {

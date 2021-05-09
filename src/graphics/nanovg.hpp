@@ -29,5 +29,16 @@ class NvgContext {
  private:
   NVGcontext* m_ctx;
 };
+
+inline NVGpaint ColorAsPaint(const NVGcolor color) {
+  NVGpaint p{0};
+  nvgTransformIdentity(p.xform);
+  p.innerColor = color;
+  p.outerColor = color;
+  p.feather = 1.0f;
+  p.radius = 0.0f;
+  return p;
+}
+
 }  // namespace ctn
 
