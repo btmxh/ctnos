@@ -55,6 +55,7 @@ class WindowManager {
   Input m_input;
   std::unordered_map<WindowID, std::unique_ptr<Window>> m_windows;
   std::vector<WindowID> m_windowOrder;
+  WindowID m_focusWindow;
   WindowID m_idCounter = DESKTOP_WINDOW;
 };
 }  // namespace ctn

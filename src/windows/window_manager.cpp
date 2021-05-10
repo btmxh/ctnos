@@ -9,11 +9,11 @@
 ctn::WindowManager::WindowManager(DesktopState& state)
     : m_desktopState(state), m_input(state.GetGame().GetWindow()) {
   // clang-format off
-  CreateWindow<DesktopWindow>(DesktopWindowBuilder()
+  m_focusWindow = CreateWindow<DesktopWindow>(DesktopWindowBuilder()
     .SetDecorated(false)
     .SetAlwaysOnTop(false)
     .SetBounds({{0.0f, 0.0f}, state.GetGame().GetFramebufferSize()})
-    .SetTitle("desktop_window"));
+    .SetTitle("desktop_window")).m_id;
   // clang-format on
 }
 
