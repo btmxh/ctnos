@@ -3,9 +3,11 @@
 #include "../game.hpp"
 
 ctn::DesktopState::DesktopState(Game& game) : State(game), m_windows(*this)  {
+  // clang-format off
   m_windows.CreateWindow<CalculatorWindow>(CalculatorWindowBuilder()
-      .SetBounds({100, 100, 200, 300})
+      .SetBounds({100, 100, 300, 400})
       .SetMinimumSize({100, 100}));
+  // clang-format on
 }
 
 void ctn::DesktopState::Render(float delta) {
