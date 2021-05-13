@@ -8,18 +8,12 @@ namespace ctn {
 template <typename SELF>
 class AppWindowBuilder : public AbstractWindowBuilder<SELF> {
  public:
-  SELF& SetResizable(bool resizable) {
-    m_resizable = resizable;
-    return this->self();
-  }
-  
   SELF& SetMinimumSize(Vec2 minSize) {
     m_minimumSize = minSize;
     return this->self();
   }
 
  private:
-  bool m_resizable = true;
   Vec2 m_minimumSize = Vec2(100.0f, 100.0f);
 
   friend class AppWindow;
@@ -52,13 +46,11 @@ class AppWindow : public Window {
                 const Builder&, const AppWindowBuilder<Builder>&>>>
   AppWindow(WindowManager& mgr, WindowID id, const Builder& builder)
       : Window(mgr, id, builder),
-        m_resizable(builder.m_resizable),
         m_minimumSize(builder.m_minimumSize) {
     ClampBounds({WindowBoundChangeType::WINDOW_CREATE});
   }
 
  private:
-  bool m_resizable;
   Vec2 m_minimumSize;
 };
 

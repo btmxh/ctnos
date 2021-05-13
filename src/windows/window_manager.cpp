@@ -80,3 +80,7 @@ ctn::Vec2 ctn::WindowManager::GetSize() const {
   return m_windows.find(DESKTOP_WINDOW)->second->GetBounds().max;
 }
 
+ctn::WindowID ctn::WindowManager::GetFocusWindowID() const {
+  return m_focusWindow;
+}
+

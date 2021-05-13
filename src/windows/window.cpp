@@ -12,25 +12,36 @@ const NVGpaint ctn::Window::TITLE_PAINT =
     ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f));
 const float ctn::Window::WIN_BUTTON_RADIUS = 6.0f;
 const float ctn::Window::WIN_BUTTON_GAP = 4.0f;
-std::map<ctn::ButtonData::State, NVGpaint> ctn::Window::WIN_BUTTON_PAINT = {
-    {ctn::ButtonData::State::NORMAL,
-     ctn::ColorAsPaint(nvgRGBf(0.3f, 0.3f, 0.3f))},
-    {ctn::ButtonData::State::HOVER,
-     ctn::ColorAsPaint(nvgRGBf(0.5f, 0.5f, 0.5f))},
-    {ctn::ButtonData::State::CLICK,
-     ctn::ColorAsPaint(nvgRGBf(0.7f, 0.7f, 0.7f))}};
-std::map<ctn::ButtonData::State, NVGpaint>
-    ctn::Window::WIN_BUTTON_SYMBOL_PAINT = {
-        {ctn::ButtonData::State::NORMAL,
-         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
-        {ctn::ButtonData::State::HOVER,
-         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
-        {ctn::ButtonData::State::CLICK,
-         ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f))},
-};
+
+NVGpaint ctn::Window::WIN_BUTTON_PAINT(const ctn::ButtonData::State &state, bool windowFocused) {
+  switch (state) {
+    case ctn::ButtonData::State::NORMAL:
+      return ctn::ColorAsPaint(nvgRGBf(0.3f, 0.3f, 0.3f));
+    case ctn::ButtonData::State::HOVER:
+      return ctn::ColorAsPaint(nvgRGBf(0.5f, 0.5f, 0.5f));
+    case ctn::ButtonData::State::CLICK:
+      return ctn::ColorAsPaint(nvgRGBf(0.7f, 0.7f, 0.7f));
+    default:
+      throw std::logic_error("Invalid state");
+  }
+}
+
+NVGpaint ctn::Window::WIN_BUTTON_SYMBOL_PAINT(const ctn::ButtonData::State &state, bool windowFocused) {
+  return ctn::ColorAsPaint(nvgRGBf(1.0f, 1.0f, 1.0f));
+}
+
+void ctn::Window::MoveWindow() {
+  if (!m_visible || !m_decorated) return;
+  auto& input = m_mgr.GetInput();
+  auto lastPressedCursorPos =
+      input.mouseButtons[vkfw::MouseButton::eLeft]->lastPressedCursorPos;
+  
+}
 
 void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
   if (!m_visible) return;
+  bool focused = m_mgr.GetFocusWindowID() == m_id;
+  MoveWindow();
   nvgSave(ctx);
 
   nvgTranslate(ctx, m_bounds.min.x, m_bounds.min.y);
@@ -85,7 +96,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
                nvgBeginPath(nvg);
 
                nvg.Circle(bounds);
-               nvgFillPaint(nvg, WIN_BUTTON_PAINT[data.state]);
+               nvgFillPaint(nvg, WIN_BUTTON_PAINT(data.state, focused));
                nvgFill(nvg);
 
                nvgClosePath(nvg);
@@ -98,7 +109,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
                nvg.MoveTo(bounds.center - Vec2(0.5f, -0.5f) * bounds.radius);
                nvg.LineTo(bounds.center + Vec2(0.5f, -0.5f) * bounds.radius);
 
-               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT[data.state]);
+               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT(data.state, focused));
                nvgStrokeWidth(nvg, 1.0f);
                nvgStroke(nvg);
 
@@ -112,7 +123,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
                nvgBeginPath(nvg);
 
                nvg.Circle(bounds);
-               nvgFillPaint(nvg, WIN_BUTTON_PAINT[data.state]);
+               nvgFillPaint(nvg, WIN_BUTTON_PAINT(data.state, focused));
                nvgFill(nvg);
 
                nvgClosePath(nvg);
@@ -121,7 +132,7 @@ void ctn::Window::RenderWindow(NvgContext& ctx, float delta) {
 
                nvg.MoveTo(bounds.center - Vec2(bounds.radius * 0.5f, 0.0f));
                nvg.LineTo(bounds.center + Vec2(bounds.radius * 0.5f, 0.0f));
-               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT[data.state]);
+               nvgStrokePaint(nvg, WIN_BUTTON_SYMBOL_PAINT(data.state, focused));
                nvgStrokeWidth(nvg, 1.0f);
                nvgStroke(nvg);
 

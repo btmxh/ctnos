@@ -13,7 +13,6 @@ namespace ctn {
 class WindowManager;
 class Window;
 using WindowID = size_t;
-
 template <typename SELF>
 class AbstractWindowBuilder {
  private:
@@ -42,11 +41,17 @@ class AbstractWindowBuilder {
     return self();
   }
 
+  SELF& SetResizable(bool resizable) {
+    m_resizable = resizable;
+    return self();
+  }
+
  private:
   Rect2 m_bounds = {0.0f, 0.0f, 0.0f, 0.0f};
   std::string m_title = "Window";
   bool m_decorated = true;
   bool m_alwaysOnTop = false;
+  bool m_resizable = true;
 
   friend class Window;
 };
@@ -59,9 +64,8 @@ class Window {
   static const NVGpaint TITLE_PAINT;
   static const float WIN_BUTTON_RADIUS, WIN_BUTTON_GAP;
 
-  /* not const due to operator[] */
-  static std::map<ctn::ButtonData::State, NVGpaint> WIN_BUTTON_PAINT,
-      WIN_BUTTON_SYMBOL_PAINT;
+  static NVGpaint WIN_BUTTON_PAINT(const ctn::ButtonData::State& state, bool windowFocused);
+  static NVGpaint WIN_BUTTON_SYMBOL_PAINT(const ctn::ButtonData::State& state, bool windowFocused);
 
   template <typename SELF>
   Window(WindowManager& mgr, WindowID id,
@@ -72,9 +76,11 @@ class Window {
         m_bounds(builder.m_bounds),
         m_alwaysOnTop(builder.m_alwaysOnTop),
         m_decorated(builder.m_decorated),
+        m_resizable(builder.m_resizable),
         m_visible(true),
         m_shouldClose(false) {}
 
+  void MoveWindow();
   void RenderWindow(NvgContext& ctx, float delta);
   virtual void RenderContent(NvgContext& ctx, float delta);
 
@@ -94,6 +100,7 @@ class Window {
   std::string m_title;
   bool m_decorated;
   bool m_alwaysOnTop;
+  bool m_resizable;
   bool m_visible;
   bool m_shouldClose;
 

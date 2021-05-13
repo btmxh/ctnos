@@ -47,6 +47,8 @@ class WindowManager {
 
   Input& GetInput();
 
+  WindowID GetFocusWindowID() const;
+
   void Resize(Vec2 newSize);
   Vec2 GetSize() const;
 
